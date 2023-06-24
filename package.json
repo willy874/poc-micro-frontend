@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "pnpm --filter react-main-app start & pnpm --filter vue-main-app start"
+    "start": "pnpm --filter react-main-app start & pnpm --filter vue-main-app start & pnpm --filter vue-sub-app start & pnpm --filter vue-sub-app start"
   },
   "author": "",
   "license": "ISC"
