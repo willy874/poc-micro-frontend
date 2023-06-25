@@ -259,10 +259,33 @@ const render = () => {
 
 面對不同框架的相容性問題，可以透過 Web Component 來進行管理，但是 Web Component 也會有不同框架的打包問題，這時候就需要透過打包工具來進行管理，但是打包工具也會有不同框架的相容性問題，這時候就需要透過打包工具的插件來整合。微應用與微應用盡量要避免直接傳遞組件物件，盡量使用字串來傳遞，這樣就可以避免不同框架的相容性問題。
 
-## 地雷
+## 常見問題
 
-### 1. 不要使用 Vite
+### 直接以 React Component 來進行拆分
 
+或許看過這樣使用 :
+
+```jsx
+const AppFC = lazy(() => import('app/ReactComponent'))
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AppFC />
+    </Suspense>
+  )
+}
+```
+
+雖然直接以 Component 來進行拆分方方便，但是這樣的方式會當跨框架使用時將無法溝通，這種方式不如採用 Package Library，還可以得到完整的 TS 型別支援，也可以減少網路損耗。而微應用要去解決的應該是業務層的拆分，而不是技術層的拆分。
+
+### 跨應用取得 JS 檔案怎麼取？
+
+應該要把共享元件的進入點封裝成 JS 檔案，而且不要在打算取得的檔案命名的地方加上哈希字串，這樣遠端才能夠預期得到的檔案名稱。或是可以建立檔案索取的路徑表，透過建立資料集查詢索取檔案的目標位置。但這些問題根本解決是需要建立一個 Proxy Server，可以用 Nginx, k8s ingress 等等方案來達到轉址取得靜態資源。不建議直接在前端進行處理，這樣會有安全性的問題。
+
+### 使用 Vite Module Federation
+
+雖然網路上可以找到使用 Vite Module Federation 的範例，但是目前 Vite Module Federation 還不夠穩定，而且也沒有完整的文件，這樣的方式會讓整個專案變得非常不穩定，建議還是使用 Webpack Module Federation，實質上來講，官方也沒有給出很好的解決方案。
+萬一就是要跟 Vite 的專案進行整合，要特別注意有些套件可能發生衝突，甚至沒辦法在 development mode 進行 Module Federation 的跨應用共享。建議的做法是採用 Webpack 執行編譯輸出，隔離開發採用 Vite 運行。但一次兩套維護成本非常高，目前只期待官方能夠提供更好的解決方案，尚無較優的解決方案。
 
 ## Reference
 
