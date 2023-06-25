@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import { router } from './router'
 
 class MicroApp extends HTMLElement {
   connectedCallback() {
@@ -7,7 +8,7 @@ class MicroApp extends HTMLElement {
       width: 100%;
       height: 100%;
     `;
-    createApp(App).mount(this);
+    createApp(App).use(router).mount(this);
   }
 }
 

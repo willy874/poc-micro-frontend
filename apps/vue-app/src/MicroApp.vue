@@ -1,5 +1,5 @@
 <script>
-import { h, onMounted, defineComponent } from 'vue'
+import { h, onMounted, defineComponent, computed, onUpdated } from 'vue'
 
 function loadScript(url) {
   return new Promise((resolve, reject) => {
@@ -17,15 +17,25 @@ export default defineComponent({
     name: {
       type: String,
       required: true
+    },
+    url: {
+      type: String,
+      required: true
     }
   },
-  setup({ name }) {
-    onMounted(async () => {
-      await loadScript()
-      const getModule = await window[name].get()
-      getModule()
-    })
-    return () => h(name);
+  setup(props) {
+    const tagName = computed(() => props.name.split('_').join('-'))
+    const fetchMicroApp = () => {
+      if (!window[props.name]) {
+        return loadScript(props.url)
+          .then(() => window[props.name].get('./app'))
+          .then((get) => get())
+      }
+      return Promise.resolve()
+    }
+    onMounted(() => fetchMicroApp())
+    onUpdated(() => fetchMicroApp())
+    return () => h(tagName.value)
   }
 });
 </script>

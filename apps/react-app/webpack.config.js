@@ -1,10 +1,9 @@
 const path = require("path");
-const { VueLoaderPlugin } = require("vue-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
-const REMOTE_NAME = "vue_app_1";
+const REMOTE_NAME = "react_app";
 
 module.exports = (env = {}) => ({
   mode: "development",
@@ -85,15 +84,15 @@ module.exports = (env = {}) => ({
       },
     },
     proxy: {
-      [`/apps/vue_sub_app`]: {
-        target: 'http://localhost:4201',
+      [`/apps/vue_webpack_app`]: {
+        target: 'http://172.20.10.7:4201/',
         changeOrigin: true,
-        pathRewrite: { [`/apps/vue_sub_app`]: '' },
+        pathRewrite: { [`^/apps/vue_webpack_app`]: '' },
       },
-      [`/apps/react_sub_app`]: {
-        target: 'http://localhost:4202',
+      [`/apps/react_webpack_app`]: {
+        target: 'http://172.20.10.7:4202/',
         changeOrigin: true,
-        pathRewrite: { [`/apps/react_sub_app`]: '' },
+        pathRewrite: { [`^/apps/react_webpack_app`]: '' },
       },
     },
   },

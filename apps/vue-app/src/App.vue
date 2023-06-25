@@ -1,13 +1,17 @@
 <script lang="jsx">
 import { defineComponent } from 'vue'
-import MicroApp from './MicroApp.vue'
+import { RouterView, RouterLink } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
   setup() {
     return () => (
       <div>
-        <MicroApp name="vue_sub_app"></MicroApp>
+        <ul>
+          <li><RouterLink to="/vue">Vue</RouterLink></li>
+          <li><RouterLink to="/react">React</RouterLink></li>
+        </ul>
+        <RouterView />
       </div>
     )
   }

@@ -1,11 +1,9 @@
 const path = require("path");
-const { VueLoaderPlugin } = require("vue-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
-const webpack = require("webpack");
 
-const REMOTE_NAME = "vue_app";
+const REMOTE_NAME = "react_webpack_app";
 
 module.exports = (env = {}) => ({
   mode: "development",
@@ -25,20 +23,15 @@ module.exports = (env = {}) => ({
       path.resolve(__dirname, 'node_modules'),
       path.resolve(__dirname, '..', '..', 'node_modules'),
     ],
-    extensions: [".vue", ".jsx", ".js", ".json"]
+    extensions: [".jsx", ".js", ".json"]
   },
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        use: "vue-loader",
-      },
-      {
-        test: /\.m?js(x)?$/,
+        test: /\.(c|m)?js(x)?$/,
         exclude: /(node_modules)/,
-        loader: 'babel-loader',
-        options: {
-          plugins: ["@vue/babel-plugin-jsx"]
+        use: {
+          loader: "swc-loader"
         }
       },
       {
@@ -54,10 +47,6 @@ module.exports = (env = {}) => ({
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      __VUE_OPTIONS_API__: true,
-      __VUE_PROD_DEVTOOLS__: true,
-    }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
@@ -76,13 +65,12 @@ module.exports = (env = {}) => ({
       template: path.resolve(__dirname, "./public/index.html"),
       publicPath: '/',
     }),
-    new VueLoaderPlugin(),
   ],
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
     },
-    port: 4111,
+    port: 4202,
     host: '0.0.0.0',
     historyApiFallback: {
       disableDotRule: true,
@@ -93,18 +81,6 @@ module.exports = (env = {}) => ({
     client: {
       webSocketURL: {
         hostname: '0.0.0.0',
-      },
-    },
-    proxy: {
-      [`/apps/vue_webpack_app`]: {
-        target: 'http://172.20.10.7:4201',
-        changeOrigin: true,
-        pathRewrite: { [`/apps/vue_webpack_app`]: '' },
-      },
-      [`/apps/react_webpack_app`]: {
-        target: 'http://172.20.10.7:4202',
-        changeOrigin: true,
-        pathRewrite: { [`/apps/react_webpack_app`]: '' },
       },
     },
   },

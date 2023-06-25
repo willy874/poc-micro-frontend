@@ -1,23 +1,24 @@
-import { createElement, useEffect } from 'react'
-import { PropTypes } from 'react/prop-types'
+import { createElement, useEffect, useRef } from 'react'
 
-const loadScript = (origin) => {
+function loadScript(url) {
   return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src =  origin;
-    script.async = true;
+    const script = document.createElement('script')
+    script.src = url
     script.onload = resolve
     script.onerror = reject
-    document.body.appendChild(script);
+    document.body.appendChild(script)
   })
-};
-
-export default function MicroApp({ name, origin }) {
-  useEffect(() => loadScript(origin), [origin])
-  return createElement(name)
 }
 
-MicroApp.propTypes = {
-  name: PropTypes.string.isRequired,
-  origin: PropTypes.string.isRequired,
+export default function MicroApp({ name, url }) {
+  const tagName = name.split('_').join('-')
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!window[name]) {
+      loadScript(url)
+        .then(() => window[name].get('./app'))
+        .then((get) => get())
+    }
+  }, [name, url])
+  return createElement(tagName, { ref })
 }

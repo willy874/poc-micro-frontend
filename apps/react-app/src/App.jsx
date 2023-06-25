@@ -1,23 +1,26 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import MicroApp from './MicroApp'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <h1>Micro App React</h1>
+      <BrowserRouter>
+        <ul>
+          <li><Link to="/vue">Vue</Link></li>
+          <li><Link to="/react">React</Link></li>
+        </ul>
+        <Routes>
+          <Route path="/" element={<div></div>} />
+          <Route path="/vue" element={<div>
+            <MicroApp name="vue_webpack_app" url="/apps/vue_webpack_app/remoteEntry.js" />
+          </div>} />
+          <Route path="/react" element={<div>
+            <MicroApp name="react_webpack_app" url="/apps/react_webpack_app/remoteEntry.js" />
+          </div>} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 
