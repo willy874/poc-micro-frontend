@@ -282,12 +282,21 @@ function App() {
 
 應該要把共享元件的進入點封裝成 JS 檔案，而且不要在打算取得的檔案命名的地方加上哈希字串，這樣遠端才能夠預期得到的檔案名稱。或是可以建立檔案索取的路徑表，透過建立資料集查詢索取檔案的目標位置。但這些問題根本解決是需要建立一個 Proxy Server，可以用 Nginx, k8s ingress 等等方案來達到轉址取得靜態資源。不建議直接在前端進行處理，這樣會有安全性的問題。
 
-### 使用 Vite Module Federation
+### 可以使用 Vite Module Federation？
 
 雖然網路上可以找到使用 Vite Module Federation 的範例，但是目前 Vite Module Federation 還不夠穩定，而且也沒有完整的文件，這樣的方式會讓整個專案變得非常不穩定，建議還是使用 Webpack Module Federation，實質上來講，官方也沒有給出很好的解決方案。
 萬一就是要跟 Vite 的專案進行整合，要特別注意有些套件可能發生衝突，甚至沒辦法在 development mode 進行 Module Federation 的跨應用共享。建議的做法是採用 Webpack 執行編譯輸出，隔離開發採用 Vite 運行。但一次兩套維護成本非常高，目前只期待官方能夠提供更好的解決方案，尚無較優的解決方案。
 
+### 前端變數該怎麼傳遞？
+
+大部分前端想渲染變數，直覺做法其實是在專案 env 設定，但這其實是有很大的限制。如果需要在 Docker Image 環境渲染就會無法修改，每一次修改變數就要經歷漫長的 docker build 過程。最理想是要有一個變數的靜態檔案存放在資源處，透過修改這份靜態檔案，讓重新拉取應用的對象或是直接在部署階段都可以帶入參數。這樣的方式可以避免每一次修改變數都要重新打包，也可以避免在 Docker Image 環境無法修改變數的問題。
+如果提供資源的主應用能夠採用 Client Service，更能夠動態透過伺服器去渲染變數。當然，SSR 架構的微應用更加複雜。
+
+### 要如何共享型別和函式？
+
+答案是「不要共享」，所有要共享的東西應該都包裝成 Package Library，要傳遞的狀態則是透過傳遞用的接口去接收，型別則是透過 Package Library 去得知，或是以規範文件去規定應該使用的規格。
+
 ## Reference
 
-[Micro Frontends](https://leanylabs.com/blog/micro-frontends-overview/)
-[All You Need to Know About Micro Frontends](https://micro-frontends.org/)
+- [Micro Frontends](https://leanylabs.com/blog/micro-frontends-overview/)
+- [All You Need to Know About Micro Frontends](https://micro-frontends.org/)
