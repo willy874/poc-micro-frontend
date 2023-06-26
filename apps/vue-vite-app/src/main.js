@@ -1,5 +1,14 @@
 import { createApp } from 'vue'
-import './style.css'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+class MicroApp extends HTMLElement {
+  connectedCallback() {
+    this.style.cssText = `
+      width: 100%;
+      height: 100%;
+    `;
+    createApp(App).mount(this);
+  }
+}
+
+customElements.define('vue-vite-app', MicroApp);

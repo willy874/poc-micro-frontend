@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
 const REMOTE_NAME = "react_app";
+const LOCAL_HOST = '192.168.0.91'
 
 module.exports = (env = {}) => ({
   mode: "development",
@@ -85,14 +86,24 @@ module.exports = (env = {}) => ({
     },
     proxy: {
       [`/apps/vue_webpack_app`]: {
-        target: 'http://172.20.10.7:4201/',
+        target: `http://${LOCAL_HOST}:4201/`,
         changeOrigin: true,
         pathRewrite: { [`^/apps/vue_webpack_app`]: '' },
       },
       [`/apps/react_webpack_app`]: {
-        target: 'http://172.20.10.7:4202/',
+        target: `http://${LOCAL_HOST}:4202/`,
         changeOrigin: true,
         pathRewrite: { [`^/apps/react_webpack_app`]: '' },
+      },
+      [`/apps/vue_vite_app`]: {
+        target: `http://${LOCAL_HOST}:4203`,
+        changeOrigin: true,
+        pathRewrite: { [`/apps/vue_vite_app`]: '' },
+      },
+      [`/apps/react_vite_app`]: {
+        target: `http://${LOCAL_HOST}:4204`,
+        changeOrigin: true,
+        pathRewrite: { [`/apps/react_vite_app`]: '' },
       },
     },
   },

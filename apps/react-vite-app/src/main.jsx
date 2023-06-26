@@ -1,10 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+class MicroApp extends HTMLElement {
+  connectedCallback() {
+    this.style.cssText = `
+      width: 100%;
+      height: 100%;
+    `;
+    ReactDOM.createRoot(this).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  }
+}
+
+customElements.define('react-vite-app', MicroApp);

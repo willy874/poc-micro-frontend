@@ -7,7 +7,7 @@ export default defineComponent({
   setup() {
     return () => (
       <div>
-        <HelloWorld msg="vue-webpack-app"></HelloWorld>
+        <HelloWorld msg="Webpack + Vue"></HelloWorld>
       </div>
     )
   }
