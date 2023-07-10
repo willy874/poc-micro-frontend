@@ -7,6 +7,7 @@ export default defineComponent({
   setup() {
     return () => (
       <div>
+        <h2>Micro App Vue</h2>
         <ul>
           <li><RouterLink to="/vue">Vue</RouterLink></li>
           <li><RouterLink to="/react">React</RouterLink></li>
