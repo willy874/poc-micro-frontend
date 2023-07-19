@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
-const REMOTE_NAME = "react_app";
+const REMOTE_NAME = "main_app";
 const LOCAL_HOST = '192.168.0.91'
 
 module.exports = (env = {}) => ({
@@ -13,7 +13,7 @@ module.exports = (env = {}) => ({
     minimize: false,
   },
   target: "web",
-  entry: path.resolve(__dirname, "./src/main.js"),
+  entry: path.resolve(__dirname, "./src/bootstrap.js"),
   output: {
     publicPath: "auto",
   },
@@ -47,7 +47,7 @@ module.exports = (env = {}) => ({
       exposes: {
         "./app": "./src/bootstrap.js",
       },
-      remotes: ['vue_app', "react_app", 'vue_vite_app', 'react_vite_app']
+      remotes: ['vue_app', "react_app", 'vue_vite_app', 'react_vite_app', 'react_webpack_app', 'vue_webpack_app'],
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "./public/index.html"),
@@ -73,32 +73,32 @@ module.exports = (env = {}) => ({
     },
     proxy: {
       [`/apps/vue_app`]: {
-        target: `http://${LOCAL_HOST}:4111/`,
+        target: `http://${LOCAL_HOST}:4201/`,
         changeOrigin: true,
         pathRewrite: { [`^/apps/vue_app`]: '' },
       },
       [`/apps/react_app`]: {
-        target: `http://${LOCAL_HOST}:4112/`,
+        target: `http://${LOCAL_HOST}:4202/`,
         changeOrigin: true,
         pathRewrite: { [`^/apps/react_app`]: '' },
       },
       [`/apps/vue_webpack_app`]: {
-        target: `http://${LOCAL_HOST}:4201/`,
+        target: `http://${LOCAL_HOST}:4203/`,
         changeOrigin: true,
         pathRewrite: { [`^/apps/vue_webpack_app`]: '' },
       },
       [`/apps/react_webpack_app`]: {
-        target: `http://${LOCAL_HOST}:4202/`,
+        target: `http://${LOCAL_HOST}:4204/`,
         changeOrigin: true,
         pathRewrite: { [`^/apps/react_webpack_app`]: '' },
       },
       [`/apps/vue_vite_app`]: {
-        target: `http://${LOCAL_HOST}:4203`,
+        target: `http://${LOCAL_HOST}:4205`,
         changeOrigin: true,
         pathRewrite: { [`/apps/vue_vite_app`]: '' },
       },
       [`/apps/react_vite_app`]: {
-        target: `http://${LOCAL_HOST}:4204`,
+        target: `http://${LOCAL_HOST}:4206`,
         changeOrigin: true,
         pathRewrite: { [`/apps/react_vite_app`]: '' },
       },

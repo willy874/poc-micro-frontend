@@ -16,4 +16,6 @@ class MicroApp extends HTMLElement {
   }
 }
 
-customElements.define('react-vite-app', MicroApp);
+if (customElements.get('react-vite-app') === undefined) {
+  customElements.define('react-vite-app', MicroApp);
+}

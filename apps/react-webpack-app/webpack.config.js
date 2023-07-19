@@ -70,7 +70,7 @@ module.exports = (env = {}) => ({
     static: {
       directory: path.join(__dirname, "public"),
     },
-    port: 4202,
+    port: 4204,
     host: '0.0.0.0',
     historyApiFallback: {
       disableDotRule: true,

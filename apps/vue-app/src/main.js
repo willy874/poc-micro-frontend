@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { router } from './router'
 
+
+
 class MicroApp extends HTMLElement {
   connectedCallback() {
     this.style.cssText = `
@@ -12,4 +14,6 @@ class MicroApp extends HTMLElement {
   }
 }
 
-customElements.define('vue-app', MicroApp);
+if (customElements.get('vue-app') === undefined) {
+  customElements.define('vue-app', MicroApp);
+}

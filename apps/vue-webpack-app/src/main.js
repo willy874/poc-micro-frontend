@@ -11,4 +11,6 @@ class MicroApp extends HTMLElement {
   }
 }
 
-customElements.define('vue-webpack-app', MicroApp);
+if (customElements.get('vue-webpack-app') === undefined) {
+  customElements.define('vue-webpack-app', MicroApp);
+}

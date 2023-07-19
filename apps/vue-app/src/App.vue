@@ -1,16 +1,51 @@
 <script lang="jsx">
-import { defineComponent } from 'vue'
-import { RouterView, RouterLink } from 'vue-router'
+import { defineComponent, onUnmounted, onMounted, watch } from 'vue'
+import { useRouter, useRoute, RouterView, RouterLink } from 'vue-router'
+
+function pick(obj, keys ) {
+  return keys.reduce((acc, key) => {
+    if (obj && obj[key]) {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {});
+}
 
 export default defineComponent({
   name: 'App',
   setup() {
+    const router = useRouter();
+    const route = useRoute()
+    const routerEventHandler = (event) => {
+      if (event.detail.path !== route.path && event.detail.app !== 'vue_app') {
+        router.push(event.detail.path);
+      }
+    }
+    watch(route, (to) => {
+      const routePick = (r) => {
+        return {
+          app: 'vue_app',
+          ...pick(r, ['path', 'query', 'params', 'hash'])
+        }
+      }
+      window.dispatchEvent(new CustomEvent('micro-app:routing-event', {
+        detail: routePick(to)
+      }))
+    })
+    onMounted(() => {
+      window.addEventListener('micro-app:routing-event', routerEventHandler);
+    })
+    onUnmounted(() => {
+      window.removeEventListener('micro-app:routing-event', routerEventHandler);
+    })
     return () => (
-      <div>
-        <h2>Micro App Vue</h2>
+      <div style={{ border: '1px solid #000' }}>
+        <h1>Micro App Vue</h1>
         <ul>
-          <li><RouterLink to="/vue">Vue</RouterLink></li>
-          <li><RouterLink to="/react">React</RouterLink></li>
+          <li><RouterLink to="/webpack-vue">Webpack Vue</RouterLink></li>
+          <li><RouterLink to="/webpack-react">Webpack React</RouterLink></li>
+          <li><RouterLink to="/vite-vue">Vite Vue</RouterLink></li>
+          <li><RouterLink to="/vite-react">Vite React</RouterLink></li>
         </ul>
         <RouterView />
       </div>

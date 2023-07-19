@@ -6,10 +6,9 @@ const REMOTE_NAME = "vue_vite_app";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // http://192.168.0.91:4203/
   preview: {
     host: '0.0.0.0',
-    port: 4203,
+    port: 4205,
   },
   build: {
     modulePreload: false,

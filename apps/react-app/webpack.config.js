@@ -71,7 +71,7 @@ module.exports = (env = {}) => ({
     static: {
       directory: path.join(__dirname, "public"),
     },
-    port: 4112,
+    port: 4202,
     host: '0.0.0.0',
     historyApiFallback: {
       disableDotRule: true,
@@ -82,28 +82,6 @@ module.exports = (env = {}) => ({
     client: {
       webSocketURL: {
         hostname: '0.0.0.0',
-      },
-    },
-    proxy: {
-      [`/apps/vue_webpack_app`]: {
-        target: `http://${LOCAL_HOST}:4201/`,
-        changeOrigin: true,
-        pathRewrite: { [`^/apps/vue_webpack_app`]: '' },
-      },
-      [`/apps/react_webpack_app`]: {
-        target: `http://${LOCAL_HOST}:4202/`,
-        changeOrigin: true,
-        pathRewrite: { [`^/apps/react_webpack_app`]: '' },
-      },
-      [`/apps/vue_vite_app`]: {
-        target: `http://${LOCAL_HOST}:4203`,
-        changeOrigin: true,
-        pathRewrite: { [`/apps/vue_vite_app`]: '' },
-      },
-      [`/apps/react_vite_app`]: {
-        target: `http://${LOCAL_HOST}:4204`,
-        changeOrigin: true,
-        pathRewrite: { [`/apps/react_vite_app`]: '' },
       },
     },
   },

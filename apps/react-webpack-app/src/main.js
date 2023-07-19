@@ -13,4 +13,6 @@ class MicroApp extends HTMLElement {
   }
 }
 
-customElements.define('react-webpack-app', MicroApp);
+if (customElements.get('react-webpack-app') === undefined) {
+  customElements.define('react-webpack-app', MicroApp);
+}
