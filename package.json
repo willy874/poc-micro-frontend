@@ -7,10 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "pnpm start:main & pnpm start:react & pnpm start:vue",
-    "start:main": "pnpm --filter main-app start",
-    "start:react": "pnpm --filter react-app start & pnpm --filter react-vite-app start & pnpm --filter react-webpack-app start",
-    "start:vue": "pnpm --filter vue-app start & pnpm --filter vue-vite-app start & pnpm --filter vue-webpack-app start"
+    "serve": "pnpm --filter webpack-main-app --filter webpack-sub-app --filter vite-vue-app serve"
   },
   "author": "",
   "license": "ISC"

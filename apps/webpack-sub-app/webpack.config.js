@@ -1,9 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { ModuleFederationPlugin } = require("webpack").container;
-
-const REMOTE_NAME = "main_app";
-const LOCAL_HOST = '192.168.0.91'
+const container = require("@module-federation/enhanced/webpack")
+// const { container } = require("webpack");
+const REMOTE_NAME = "sub_webpack_app";
 
 module.exports = (env = {}) => ({
   mode: "development",
@@ -15,7 +14,12 @@ module.exports = (env = {}) => ({
   target: "web",
   entry: path.resolve(__dirname, "./src/main.js"),
   output: {
-    publicPath: "auto",
+    clean: false,
+    publicPath: 'auto',
+    hashFunction: 'xxhash64',
+    path:  path.resolve(__dirname, "dist"),
+    filename: 'js/entry.[name].[chunkhash:8].js',
+    chunkFilename: 'js/chunk.[name].[contenthash:8].js'
   },
   resolve: {
     modules: ['node_modules'],
@@ -29,34 +33,35 @@ module.exports = (env = {}) => ({
         use: {
           loader: "swc-loader"
         }
+      },
+      {
+        test: /\.(svg|png|jpe?g|gif|webp|woff2?|eot|[ot]tf)$/i,
+        type: 'asset/resource',
       }
     ],
   },
   plugins: [
-    new ModuleFederationPlugin({
+    new container.ModuleFederationPlugin({
       name: REMOTE_NAME,
-      library: {
-        type: "var",
-        name: REMOTE_NAME,
+      exposes: {
+        "./app": "./src/main.js",
       },
-      filename: "remoteEntry.js",
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "./public/index.html"),
-      publicPath: '/',
     }),
   ],
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
     },
-    port: 4110,
+    port: 4111,
     host: '0.0.0.0',
-    historyApiFallback: {
-      disableDotRule: true,
-    },
+    // historyApiFallback: {
+    //   disableDotRule: true,
+    // },
     compress: true,
-    hot: true,
+    hot: false,
     allowedHosts: 'all',
     client: {
       webSocketURL: {
@@ -64,4 +69,8 @@ module.exports = (env = {}) => ({
       },
     },
   },
+
+  optimization: {
+    runtimeChunk: true
+  }
 });
