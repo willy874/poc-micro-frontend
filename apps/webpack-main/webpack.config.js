@@ -13,7 +13,7 @@ module.exports = (env = {}) => ({
     minimize: false,
   },
   target: "web",
-  entry: path.resolve(__dirname, "./src/bootstrap.js"),
+  entry: path.resolve(__dirname, "./src/main.js"),
   output: {
     publicPath: "auto",
   },
@@ -61,38 +61,6 @@ module.exports = (env = {}) => ({
     client: {
       webSocketURL: {
         hostname: '0.0.0.0',
-      },
-    },
-    proxy: {
-      [`/apps/vue_app`]: {
-        target: `http://${LOCAL_HOST}:4201/`,
-        changeOrigin: true,
-        pathRewrite: { [`^/apps/vue_app`]: '' },
-      },
-      [`/apps/react_app`]: {
-        target: `http://${LOCAL_HOST}:4202/`,
-        changeOrigin: true,
-        pathRewrite: { [`^/apps/react_app`]: '' },
-      },
-      [`/apps/vue_webpack_app`]: {
-        target: `http://${LOCAL_HOST}:4203/`,
-        changeOrigin: true,
-        pathRewrite: { [`^/apps/vue_webpack_app`]: '' },
-      },
-      [`/apps/react_webpack_app`]: {
-        target: `http://${LOCAL_HOST}:4204/`,
-        changeOrigin: true,
-        pathRewrite: { [`^/apps/react_webpack_app`]: '' },
-      },
-      [`/apps/vue_vite_app`]: {
-        target: `http://${LOCAL_HOST}:4205`,
-        changeOrigin: true,
-        pathRewrite: { [`/apps/vue_vite_app`]: '' },
-      },
-      [`/apps/react_vite_app`]: {
-        target: `http://${LOCAL_HOST}:4206`,
-        changeOrigin: true,
-        pathRewrite: { [`/apps/react_vite_app`]: '' },
       },
     },
   },
