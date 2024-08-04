@@ -301,7 +301,18 @@ function App() {
 
 在使用 vite 打包會遇上靜態路徑資源會吃遠端對象的問題，最好的解決方案就是使用將相關靜態資源包上 CDN。或是將所有靜態資源以 JS 的形式封裝用 JS 的方式進行載入，可以避開既有機制上的限制。
 
+## Companies that use Micro Frontend
+
+IKEA
+DAZN
+Upwork
+Spotify
+SoundCloud
+HelloFresh
+Zalando
+
 ## Reference
 
 - [Micro Frontends](https://leanylabs.com/blog/micro-frontends-overview/)
 - [All You Need to Know About Micro Frontends](https://micro-frontends.org/)
+- [Micro frontend: what it is and how to use it for your business](https://www.imaginarycloud.com/blog/micro-frontend-what-it-is-and-how-to-use-it-for-your-business/)

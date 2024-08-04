@@ -1,9 +1,8 @@
 const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
-const REMOTE_NAME = "react_app";
+const REMOTE_NAME = "main_app";
 const LOCAL_HOST = '192.168.0.91'
 
 module.exports = (env = {}) => ({
@@ -14,16 +13,12 @@ module.exports = (env = {}) => ({
     minimize: false,
   },
   target: "web",
-  entry: path.resolve(__dirname, "./src/main.js"),
+  entry: path.resolve(__dirname, "./src/bootstrap.js"),
   output: {
     publicPath: "auto",
   },
   resolve: {
-    modules: [
-      'node_modules',
-      path.resolve(__dirname, 'node_modules'),
-      path.resolve(__dirname, '..', '..', 'node_modules'),
-    ],
+    modules: ['node_modules'],
     extensions: [".jsx", ".js", ".json"]
   },
   module: {
@@ -34,23 +29,10 @@ module.exports = (env = {}) => ({
         use: {
           loader: "swc-loader"
         }
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {},
-          },
-          "css-loader",
-        ],
-      },
+      }
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: "[name].css",
-    }),
     new ModuleFederationPlugin({
       name: REMOTE_NAME,
       library: {
@@ -58,9 +40,6 @@ module.exports = (env = {}) => ({
         name: REMOTE_NAME,
       },
       filename: "remoteEntry.js",
-      exposes: {
-        "./app": "./src/bootstrap.js",
-      },
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "./public/index.html"),
@@ -71,7 +50,7 @@ module.exports = (env = {}) => ({
     static: {
       directory: path.join(__dirname, "public"),
     },
-    port: 4202,
+    port: 4110,
     host: '0.0.0.0',
     historyApiFallback: {
       disableDotRule: true,
@@ -82,6 +61,38 @@ module.exports = (env = {}) => ({
     client: {
       webSocketURL: {
         hostname: '0.0.0.0',
+      },
+    },
+    proxy: {
+      [`/apps/vue_app`]: {
+        target: `http://${LOCAL_HOST}:4201/`,
+        changeOrigin: true,
+        pathRewrite: { [`^/apps/vue_app`]: '' },
+      },
+      [`/apps/react_app`]: {
+        target: `http://${LOCAL_HOST}:4202/`,
+        changeOrigin: true,
+        pathRewrite: { [`^/apps/react_app`]: '' },
+      },
+      [`/apps/vue_webpack_app`]: {
+        target: `http://${LOCAL_HOST}:4203/`,
+        changeOrigin: true,
+        pathRewrite: { [`^/apps/vue_webpack_app`]: '' },
+      },
+      [`/apps/react_webpack_app`]: {
+        target: `http://${LOCAL_HOST}:4204/`,
+        changeOrigin: true,
+        pathRewrite: { [`^/apps/react_webpack_app`]: '' },
+      },
+      [`/apps/vue_vite_app`]: {
+        target: `http://${LOCAL_HOST}:4205`,
+        changeOrigin: true,
+        pathRewrite: { [`/apps/vue_vite_app`]: '' },
+      },
+      [`/apps/react_vite_app`]: {
+        target: `http://${LOCAL_HOST}:4206`,
+        changeOrigin: true,
+        pathRewrite: { [`/apps/react_vite_app`]: '' },
       },
     },
   },
